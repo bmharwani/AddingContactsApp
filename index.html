@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>PhoneGap Application</title>
+<script type = "text/javascript" charset = "utf-8" src = "cordova.js">
+</script>
+<script type = "text/javascript">
+function onBodyLoad() {
+document.addEventListener("deviceready", PhonegapLoaded, false);
+}
+function PhonegapLoaded(){
+alert("phonegap loaded");
+document.getElementById("submitButton").addEventListener("click", addContact);
+}
+function addContact(){
+alert("inside add contact");
+var FullName = document.getElementById("name").value;
+var Address = document.getElementById("add").value;
+var emailID = document.getElementById("email").value;
+var phoneNo = document.getElementById("phone").value;
+var newContact = navigator.contacts.create();
+
+newContact.displayName = FullName;
+var phoneNums = [1];
+phoneNums[0] = new ContactField('work', phoneNo, true);
+newContact.phoneNumbers = phoneNums;
+var emailAddresses = [1];
+emailAddresses[0] = new ContactField('home', emailID, true);
+newContact.emails = emailAddresses;
+var addresses = [];
+addresses[0] = new ContactAddress();
+addresses[0].type = 'home';
+addresses[0].streetAddress = Address;
+newContact.addresses = addresses;
+newContact.save(onSuccess, onError);
+}
+function onSuccess(contact) {
+alert("New contact successfully created");
+document.getElementById("addresponse").innerHTML = "Contact successfully added";
+}
+function onError(contactError) {
+alert("Error in creating a new contact " + contactError.code);
+}
+</script>
+</head>
+<body onload = "onBodyLoad()">
+<h2> Enter information of the new contact </h2> <br/>
+<form>
+<table>
+<tr><td>Name </td><td> <input type = "text" id = "name"></td></tr>
+<tr><td>Address </td><td> <input type = "text" id = "add"></td></tr>
+<tr><td>Email Address </td><td> <input type = "text" id = "email"></td></tr>
+<tr><td>Phone Number </td><td> <input type = "text" id = "phone"></td></tr>
+</table>
+<input type = "button" id = "submitButton" value = "Submit">
+<div id = "addresponse"></div>
+</form>
+</body>
+</html>
